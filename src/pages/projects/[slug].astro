@@ -1,0 +1,140 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Tag from '../../components/Tag.astro';
+import StatusDot from '../../components/StatusDot.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects', ({ data }) => !data.draft);
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+
+const formattedDate = new Intl.DateTimeFormat('en-GB', {
+  year: 'numeric',
+  month: 'long',
+}).format(project.data.date);
+---
+
+<BaseLayout title={`${project.data.title} — mooonman`} description={project.data.description}>
+  <article class="container section">
+    <a href="/projects/" class="body-sm back-link">← All projects</a>
+
+    <div class="title-block">
+      <div class="meta-row">
+        <StatusDot status={project.data.status} />
+        <span class="label-mono meta-date">{formattedDate}</span>
+      </div>
+      <h1 class="display-xl project-title">{project.data.title}</h1>
+      <div class="tag-row">
+        {project.data.tags.map((tag) => <Tag label={tag} />)}
+      </div>
+    </div>
+
+    <div class="prose">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .section {
+    padding-block: var(--space-section);
+  }
+
+  .back-link {
+    display: inline-block;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-xl);
+  }
+
+  .back-link:hover {
+    color: var(--text-moonlight);
+  }
+
+  .title-block {
+    margin-bottom: var(--space-xl);
+  }
+
+  .meta-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+  }
+
+  .meta-date {
+    color: var(--text-mute);
+  }
+
+  .project-title {
+    margin-bottom: var(--space-md);
+  }
+
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+  }
+
+  .prose {
+    max-width: 65ch;
+    color: var(--text-secondary);
+  }
+
+  .prose :global(h2) {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(2rem, 4vw, 3rem);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    color: var(--text-moonlight);
+    margin-top: var(--space-xl);
+    margin-bottom: var(--space-sm);
+  }
+
+  .prose :global(h3) {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 1.5rem;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--text-moonlight);
+    margin-top: var(--space-lg);
+    margin-bottom: var(--space-sm);
+  }
+
+  .prose :global(p) {
+    margin-bottom: var(--space-sm);
+  }
+
+  .prose :global(a) {
+    color: var(--moonglow);
+    text-decoration: underline;
+  }
+
+  .prose :global(code) {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    background: var(--surface-overlay);
+    border-radius: 4px;
+    padding: 2px 6px;
+  }
+
+  .prose :global(pre) {
+    background: var(--surface-overlay);
+    border-radius: 8px;
+    padding: var(--space-md);
+    overflow-x: auto;
+  }
+
+  .prose :global(pre code) {
+    background: none;
+    padding: 0;
+  }
+</style>

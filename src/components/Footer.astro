@@ -1,0 +1,68 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <a href="/" class="wordmark">moo<span class="wordmark-moon">o</span>nman</a>
+
+    <p class="body-sm footer-signoff">Want to talk about any of this? Get in touch.</p>
+
+    <nav class="footer-links" aria-label="Contact">
+      <a href="mailto:alexmooney@hotmail.co.uk" class="body-sm footer-link">Email</a>
+      <a href="#" class="body-sm footer-link"><!-- PLACEHOLDER: GitHub profile URL -->GitHub</a>
+      <a href="#" class="body-sm footer-link"><!-- PLACEHOLDER: LinkedIn URL (drop if unwanted) -->LinkedIn</a>
+    </nav>
+
+    <p class="body-sm footer-print">© {year} mooonman. Built with Astro.</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--surface-raised);
+    border-top: 1px solid var(--border-hairline);
+    padding-block: var(--space-lg);
+  }
+
+  .footer-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-sm);
+  }
+
+  .wordmark {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.125rem;
+    color: var(--text-moonlight);
+  }
+
+  .wordmark-moon {
+    color: var(--moonglow);
+  }
+
+  .footer-signoff {
+    color: var(--text-secondary);
+  }
+
+  .footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+  }
+
+  .footer-link {
+    color: var(--text-secondary);
+    transition: color var(--transition-fast);
+  }
+
+  .footer-link:hover {
+    color: var(--text-moonlight);
+  }
+
+  .footer-print {
+    color: var(--text-mute);
+  }
+</style>

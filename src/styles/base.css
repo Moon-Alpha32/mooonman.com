@@ -1,0 +1,176 @@
+@import '@fontsource/space-grotesk/500.css';
+@import '@fontsource/space-grotesk/700.css';
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/500.css';
+@import '@fontsource/jetbrains-mono/400.css';
+
+@import './tokens.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd {
+  margin: 0;
+}
+
+html {
+  color-scheme: dark;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--surface-space);
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.65;
+  min-height: 100vh;
+}
+
+img,
+picture,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: var(--moonglow);
+  text-decoration: none;
+}
+
+ul,
+ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Type scale */
+
+.display-xl {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.75rem, 6vw, 4.5rem);
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  color: var(--text-moonlight);
+}
+
+.display-lg {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2rem, 4vw, 3rem);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: var(--text-moonlight);
+}
+
+.display-md {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.5rem;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  color: var(--text-moonlight);
+}
+
+.body-lg {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 1.125rem;
+  line-height: 1.7;
+}
+
+.body {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.body-sm {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.label-mono {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+/* Layout */
+
+.container {
+  width: 100%;
+  max-width: var(--content-max-width);
+  margin-inline: auto;
+  padding-inline: var(--gutter-mobile);
+}
+
+@media (min-width: 481px) {
+  .container {
+    padding-inline: var(--gutter);
+  }
+}
+
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: var(--space-sm);
+  z-index: 100;
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--surface-raised);
+  color: var(--text-moonlight);
+  border: 1px solid var(--border-hairline);
+  border-radius: 8px;
+}
+
+.skip-link:focus {
+  top: var(--space-sm);
+}
+
+/* Focus ring */
+
+:focus-visible {
+  outline: 2px solid var(--moonglow);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

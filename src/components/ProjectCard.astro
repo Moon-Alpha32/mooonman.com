@@ -1,0 +1,99 @@
+---
+import StatusDot from './StatusDot.astro';
+import Tag from './Tag.astro';
+
+interface Props {
+  href: string;
+  title: string;
+  description: string;
+  status: 'live' | 'wip' | 'archived';
+  tags: string[];
+  thumbnail?: string;
+}
+
+const { href, title, description, status, tags, thumbnail } = Astro.props;
+const visibleTags = tags.slice(0, 4);
+---
+
+<a href={href} class="card">
+  {
+    thumbnail ? (
+      <img class="card-thumb" src={thumbnail} alt="" loading="lazy" width="640" height="360" />
+    ) : (
+      <div class="card-thumb card-thumb--placeholder" aria-hidden="true" />
+    )
+  }
+
+  <div class="card-status">
+    <StatusDot status={status} />
+  </div>
+
+  <h3 class="display-md card-title">{title}</h3>
+
+  <p class="body-sm card-description">{description}</p>
+
+  {
+    visibleTags.length > 0 && (
+      <div class="card-tags">
+        {visibleTags.map((tag) => (
+          <Tag label={tag} />
+        ))}
+      </div>
+    )
+  }
+</a>
+
+<style>
+  .card {
+    display: block;
+    background: var(--surface-raised);
+    border: 1px solid var(--border-hairline);
+    border-radius: 12px;
+    padding: var(--space-md);
+    transition: background-color var(--transition-fast), border-color var(--transition-fast),
+      transform var(--transition-fast);
+  }
+
+  .card:hover {
+    background: var(--surface-overlay);
+    border-color: var(--moonglow-dim);
+    transform: translateY(-2px);
+  }
+
+  .card-thumb {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 8px;
+    object-fit: cover;
+    margin-bottom: var(--space-md);
+  }
+
+  .card-thumb--placeholder {
+    background: var(--surface-overlay);
+  }
+
+  .card-status {
+    margin-bottom: var(--space-sm);
+  }
+
+  .card-title {
+    margin-bottom: var(--space-xs);
+  }
+
+  .card-description {
+    color: var(--text-secondary);
+    margin-bottom: var(--space-sm);
+  }
+
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card:hover {
+      transform: none;
+    }
+  }
+</style>

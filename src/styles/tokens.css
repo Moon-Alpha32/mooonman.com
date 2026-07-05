@@ -1,0 +1,44 @@
+:root {
+  /* Surfaces */
+  --surface-space: #0b0d12;
+  --surface-raised: #12151c;
+  --surface-overlay: #1a1f29;
+  --border-hairline: #242a36;
+
+  /* Text */
+  --text-moonlight: #e9ecf2;
+  --text-secondary: #9aa3b2;
+  --text-mute: #768191; /* lightened from DESIGN.md's #5E6673 to clear WCAG AA 4.5:1 at label-mono sizes */
+
+  /* Accent & semantic */
+  --moonglow: #a6c8ff;
+  --moonglow-dim: #6e90c4;
+  --success: #4ade80;
+  --warning: #fbbf24;
+  --error: #f87171;
+
+  /* Fonts */
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Spacing (4px base) */
+  --space-xs: 8px;
+  --space-sm: 16px;
+  --space-md: 24px;
+  --space-lg: 40px;
+  --space-xl: 64px;
+  --space-2xl: 96px;
+  --space-section: 128px;
+
+  /* Layout */
+  --content-max-width: 1080px;
+  --gutter: 24px;
+  --gutter-mobile: 20px;
+  --nav-height: 64px;
+  --prose-max-width: 65ch;
+
+  /* Motion */
+  --transition-fast: 150ms ease;
+  --transition-max: 200ms ease;
+}

@@ -1,0 +1,261 @@
+---
+interface Props {
+  currentPath: string;
+}
+const { currentPath } = Astro.props;
+
+const links = [
+  { href: '/projects/', label: 'Projects' },
+  { href: '/#about', label: 'About' },
+  { href: 'mailto:alexmooney@hotmail.co.uk', label: 'Contact' },
+];
+
+function isActive(href: string) {
+  if (href.startsWith('mailto:') || href.startsWith('/#')) return false;
+  return currentPath === href;
+}
+---
+
+<header class="nav" id="site-nav">
+  <div class="nav-inner container">
+    <a href="/" class="wordmark">moo<span class="wordmark-moon">o</span>nman</a>
+
+    <button
+      class="nav-toggle"
+      id="nav-toggle"
+      aria-expanded="false"
+      aria-controls="nav-overlay"
+      aria-label="Open menu"
+    >
+      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bar"></span>
+    </button>
+
+    <nav class="nav-links" aria-label="Primary">
+      {
+        links.map((link) => (
+          <a href={link.href} class="nav-link" aria-current={isActive(link.href) ? 'page' : undefined}>
+            {link.label}
+          </a>
+        ))
+      }
+    </nav>
+  </div>
+
+  <div class="nav-overlay" id="nav-overlay" hidden>
+    <nav class="nav-overlay-links" aria-label="Primary">
+      {
+        links.map((link) => (
+          <a href={link.href} class="nav-overlay-link" aria-current={isActive(link.href) ? 'page' : undefined}>
+            {link.label}
+          </a>
+        ))
+      }
+    </nav>
+  </div>
+</header>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    height: var(--nav-height);
+    border-bottom: 1px solid transparent;
+    transition: background-color var(--transition-max), backdrop-filter var(--transition-max),
+      border-color var(--transition-max);
+  }
+
+  .nav.is-scrolled {
+    background-color: color-mix(in srgb, var(--surface-raised) 80%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom-color: var(--border-hairline);
+  }
+
+  .nav-inner {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .wordmark {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.125rem;
+    color: var(--text-moonlight);
+  }
+
+  .wordmark-moon {
+    color: var(--moonglow);
+  }
+
+  .nav-links {
+    display: none;
+    gap: var(--space-md);
+    align-items: center;
+  }
+
+  .nav-link {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    transition: color var(--transition-fast);
+  }
+
+  .nav-link:hover {
+    color: var(--text-moonlight);
+  }
+
+  .nav-link[aria-current='page'] {
+    color: var(--moonglow);
+  }
+
+  .nav-toggle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+  }
+
+  .nav-toggle-bar {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: var(--text-moonlight);
+    transition: transform var(--transition-max), opacity var(--transition-max);
+  }
+
+  .nav-toggle[aria-expanded='true'] .nav-toggle-bar:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .nav-toggle[aria-expanded='true'] .nav-toggle-bar:nth-child(2) {
+    opacity: 0;
+  }
+
+  .nav-toggle[aria-expanded='true'] .nav-toggle-bar:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  .nav-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    background: var(--surface-space);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nav-overlay[hidden] {
+    display: none;
+  }
+
+  .nav-overlay-links {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+    text-align: left;
+  }
+
+  .nav-overlay-link {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 1.5rem;
+    letter-spacing: -0.01em;
+    color: var(--text-moonlight);
+    padding: var(--space-xs) 0;
+  }
+
+  .nav-overlay-link[aria-current='page'] {
+    color: var(--moonglow);
+  }
+
+  @media (min-width: 769px) {
+    .nav-links {
+      display: flex;
+    }
+
+    .nav-toggle {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  const nav = document.getElementById('site-nav');
+  const toggle = document.getElementById('nav-toggle') as HTMLButtonElement | null;
+  const overlay = document.getElementById('nav-overlay');
+
+  const onScroll = () => {
+    if (!nav) return;
+    nav.classList.toggle('is-scrolled', window.scrollY > 8);
+  };
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  if (toggle && overlay) {
+    let lastFocused: HTMLElement | null = null;
+
+    const getFocusable = () =>
+      Array.from(overlay.querySelectorAll<HTMLElement>('a, button'));
+
+    const openMenu = () => {
+      lastFocused = document.activeElement as HTMLElement;
+      overlay.hidden = false;
+      toggle.setAttribute('aria-expanded', 'true');
+      toggle.setAttribute('aria-label', 'Close menu');
+      document.body.style.overflow = 'hidden';
+      const focusable = getFocusable();
+      focusable[0]?.focus();
+    };
+
+    const closeMenu = () => {
+      overlay.hidden = true;
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', 'Open menu');
+      document.body.style.overflow = '';
+      lastFocused?.focus();
+    };
+
+    toggle.addEventListener('click', () => {
+      const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+      isOpen ? closeMenu() : openMenu();
+    });
+
+    overlay.addEventListener('click', (event) => {
+      if ((event.target as HTMLElement).tagName === 'A') closeMenu();
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (overlay.hidden) return;
+
+      if (event.key === 'Escape') {
+        closeMenu();
+        return;
+      }
+
+      if (event.key === 'Tab') {
+        const focusable = getFocusable();
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      }
+    });
+  }
+</script>

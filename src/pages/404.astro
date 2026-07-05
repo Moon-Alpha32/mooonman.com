@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Lost in space — mooonman" description="This page doesn't exist — or hasn't been built yet.">
+  <section class="container not-found">
+    <h1 class="display-lg">Lost in space.</h1>
+    <p class="body not-found-body">This page doesn't exist — or hasn't been built yet.</p>
+    <a href="/" class="body-sm back-link">← Back home</a>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: var(--space-sm);
+  }
+
+  .not-found-body {
+    color: var(--text-secondary);
+  }
+
+  .back-link {
+    color: var(--moonglow);
+  }
+</style>

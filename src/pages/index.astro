@@ -1,17 +1,134 @@
 ---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Eyebrow from '../components/Eyebrow.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import Button from '../components/Button.astro';
+import { getCollection } from 'astro:content';
 
+const allProjects = await getCollection('projects', ({ data }) => !data.draft);
+const featured = allProjects
+  .filter((project) => project.data.featured)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 6);
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout
+  title="mooonman"
+  description="mooonman.com is where I put personal projects, experiments, and ideas — some finished, some in progress, all mine."
+>
+  <section class="hero">
+    <div class="container hero-inner">
+      <p class="label-mono hero-eyebrow">PERSONAL PROJECTS &amp; IDEAS</p>
+      <h1 class="display-xl hero-headline">Building things, one small orbit at a time.</h1>
+      <p class="body-lg hero-subline">
+        mooonman.com is where I put personal projects, experiments, and ideas — some
+        finished, some in progress, all mine.
+      </p>
+      <Button href="#projects" variant="ghost">View projects ↓</Button>
+    </div>
+  </section>
+
+  <section class="container section" id="projects">
+    <Eyebrow text="01 — PROJECTS" />
+    <h2 class="display-lg section-heading">Selected work</h2>
+    <div class="project-grid">
+      {
+        featured.map((project) => (
+          <ProjectCard
+            href={`/projects/${project.id}/`}
+            title={project.data.title}
+            description={project.data.description}
+            status={project.data.status}
+            tags={project.data.tags}
+          />
+        ))
+      }
+    </div>
+    <div class="section-cta">
+      <Button href="/projects/" variant="ghost">All projects →</Button>
+    </div>
+  </section>
+
+  <section class="container section" id="about">
+    <Eyebrow text="02 — ABOUT" />
+    <h2 class="display-lg section-heading">About</h2>
+    <p class="body about-body">
+      <!-- PLACEHOLDER: 2–3 sentences from Alex — who he is, what he's into, why this site
+      exists. Keep it first-person and short; no career-history paragraph. -->
+      PLACEHOLDER: 2–3 sentences from Alex — who he is, what he's into, why this site
+      exists.
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse 60% 45% at 50% -10%,
+      rgba(166, 200, 255, 0.13),
+      transparent 70%
+    );
+  }
+
+  .hero-inner {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-md);
+  }
+
+  .hero-eyebrow {
+    color: var(--moonglow);
+  }
+
+  .hero-subline {
+    color: var(--text-secondary);
+    max-width: 65ch;
+  }
+
+  .section {
+    padding-block: var(--space-section);
+  }
+
+  .section-heading {
+    margin-bottom: var(--space-xl);
+  }
+
+  .project-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-md);
+  }
+
+  .section-cta {
+    margin-top: var(--space-xl);
+  }
+
+  .about-body {
+    max-width: 65ch;
+  }
+
+  @media (max-width: 768px) {
+    .project-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .hero {
+      min-height: auto;
+      padding-block: var(--space-2xl);
+    }
+  }
+</style>

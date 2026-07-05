@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(rmdir \"/c/Users/alexm/OneDrive/Desktop/Claude Projects/mooonman.com/src/pages/projects/[slug]\" 2>/dev/null; mkdir -p \"/c/Users/alexm/OneDrive/Desktop/Claude Projects/mooonman.com/src/pages/projects\")",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(node -e \"console.log\\(require.resolve\\('sharp'\\)\\)\")",
+      "Bash(cp /tmp/gen-assets.mjs ./gen-assets.mjs)",
+      "Bash(node ./gen-assets.mjs)",
+      "Bash(rm ./gen-assets.mjs)",
+      "Bash(cd \"/c/Users/alexm/OneDrive/Desktop/Claude Projects/mooonman.com\" && ls -la public/)",
+      "Read(//c/Program Files/Google/Chrome/Application/**)",
+      "Read(//c/Program Files \\(x86\\)/Google/Chrome/Application/**)",
+      "Bash(export CHROME_PATH=\"C:\\\\Program Files\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe\")",
+      "Bash(npx --yes lighthouse http://localhost:4322/ --output=json --output-path=./lh-home.json --chrome-flags=\"--headless=new --no-sandbox\" --preset=perf --only-categories=performance,accessibility,best-practices,seo --form-factor=mobile --screenEmulation.mobile)",
+      "Bash(node -e ' *)",
+      "Bash(rm -f lh-home.json lh-project.json)",
+      "Bash(pkill -f \"astro preview\")",
+      "Bash(pkill -f \"node.*4322\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:4322/)",
+      "Bash(netstat -ano)"
+    ]
+  }
+}

@@ -1,0 +1,15 @@
+---
+interface Props {
+  text: string;
+}
+const { text } = Astro.props;
+---
+
+<p class="eyebrow label-mono">{text}</p>
+
+<style>
+  .eyebrow {
+    color: var(--moonglow);
+    margin-bottom: var(--space-sm);
+  }
+</style>
