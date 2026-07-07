@@ -1,87 +1,79 @@
 # DEPLOY.md — going live on mooonman.com
 
-This site is a static Astro build. Nothing has been deployed or registered on your
-behalf — follow these steps yourself. Should take about 15 minutes.
+This site is a static Astro build, hosted on DigitalOcean App Platform. Below is
+what's actually been set up, for reference if you need to reproduce it (e.g. a new
+app, a fresh clone, or handing this off to someone else).
 
-## 1. Push to GitHub
+## 1. GitHub
 
-```bash
-# from the project root
-git remote add origin https://github.com/<your-username>/mooonman.com.git
-git branch -M main
-git push -u origin main
-```
+Repo: `github.com/Moon-Alpha32/mooonman.com`, branch `master`. Already pushed and
+tracked — `git push` to `master` is all that's needed for future changes.
 
-If you don't have a repo yet, create an empty one first at github.com/new (no README,
-no .gitignore — this project already has them), then run the commands above.
+## 2. DigitalOcean App Platform
 
-## 2. Connect Cloudflare Pages
-
-1. Log into the [Cloudflare dashboard](https://dash.cloudflare.com).
-2. Go to **Workers & Pages** → **Create** → **Pages** → **Connect to Git**.
-3. Authorize GitHub and select the `mooonman.com` repo.
-4. Build settings:
-   - **Framework preset**: Astro
+1. In the [DigitalOcean dashboard](https://cloud.digitalocean.com), go to **Apps** →
+   **Create App** → **GitHub** → authorize/select `Moon-Alpha32/mooonman.com`, branch
+   `master`.
+2. **Important**: when configuring the resource, explicitly set the resource type to
+   **Static Site**, not the autodetected **Web Service**. The Node.js buildpack
+   detector defaults to Web Service, which provisions a paid container (~$24/mo)
+   instead of the free static-site CDN path. If you land on the review screen and see
+   a monthly cost with "vCPU / Memory / Containers" listed, delete that component and
+   re-add it, picking Static Site explicitly.
+3. Build settings:
    - **Build command**: `npm run build`
-   - **Build output directory**: `dist`
-   - **Node version**: 22 (set `NODE_VERSION=22` in Environment Variables if Cloudflare
-     doesn't auto-detect it from `package.json`'s `engines` field)
-5. Click **Save and Deploy**. First deploy will be live at `<project-name>.pages.dev`.
+   - **Output directory**: `dist`
+   - Add env var `NODE_VERSION=22` only if it doesn't auto-detect Node 22 from
+     `package.json`'s `engines` field.
+4. Leave Add a database, environment variables, and VPC network alone — none apply to
+   a static site.
+5. Name the app something recognizable (not the auto-generated placeholder name), pick
+   a datacenter region (doesn't materially matter — static content is served from DO's
+   global CDN regardless of origin region), and create the app.
+6. Total cost should show **$0.00/month** (DO's free tier covers up to 3 static sites,
+   1 GiB outbound transfer/month each; additional apps are $3/mo).
+7. First deploy will be live at `<app-name>.ondigitalocean.app`. Every push to
+   `master` auto-deploys from here on.
 
-## 3. Point mooonman.com at Cloudflare
+## 3. Point mooonman.com at the app
 
-If mooonman.com isn't already on Cloudflare DNS:
+1. In DigitalOcean, go to **Networking → Domains** → enter `mooonman.com` → choose
+   **We manage your domain** (fine as long as nothing else — email, other
+   subdomains — depends on the domain's current DNS; if it does, use **You manage
+   your domain** instead and add records manually at your existing DNS host).
+2. Copy the three nameservers DO gives you, e.g.:
+   ```
+   ns1.digitalocean.com
+   ns2.digitalocean.com
+   ns3.digitalocean.com
+   ```
+3. At your domain registrar, replace the existing nameservers with DO's three.
+4. Wait for propagation (usually well under DO's stated 72h window). Check with:
+   ```
+   nslookup -type=ns mooonman.com
+   ```
+   until it returns DO's nameservers.
+5. In the App → **Settings → Domains** → **Add Domain**, add `mooonman.com` (set as
+   Primary) and `www.mooonman.com`. Once DNS has propagated, DO automatically creates
+   the correct A/CNAME records and issues an HTTPS certificate — no manual record
+   entry needed on this path.
 
-1. **Workers & Pages** isn't required for this part — go to the main Cloudflare
-   dashboard → **Add a site** → enter `mooonman.com`.
-2. Cloudflare scans your existing DNS and shows you the records it found. Keep them
-   (or recreate any you need — mail records especially, if you use email at this
-   domain).
-3. Cloudflare gives you two nameservers, e.g.:
-   ```
-   ns1.cloudflare.com
-   ns2.cloudflare.com
-   ```
-   (Your actual values will be shown in the dashboard — they're unique per account.)
-4. Go to your domain registrar (wherever mooonman.com was purchased) and replace the
-   existing nameservers with the two Cloudflare gives you.
-5. Wait for Cloudflare to confirm the switch (can take a few minutes to ~24 hours,
-   usually fast).
+## 4. Canonical domain redirect
 
-## 4. Add the custom domain to the Pages project
+`astro.config.mjs`'s `site` value is `https://mooonman.com` (apex is canonical), so
+`www` should permanently redirect there:
 
-1. In the Pages project → **Custom domains** → **Set up a custom domain**.
-2. Enter `mooonman.com` (apex). Cloudflare automatically creates the required DNS
-   record for you:
-   ```
-   Type: CNAME
-   Name: mooonman.com (@)
-   Target: <project-name>.pages.dev
-   Proxy status: Proxied (orange cloud)
-   ```
-   Cloudflare flattens this CNAME-at-apex automatically — no manual A records needed.
-3. Repeat **Set up a custom domain** for `www.mooonman.com`. This creates:
-   ```
-   Type: CNAME
-   Name: www
-   Target: <project-name>.pages.dev
-   Proxy status: Proxied (orange cloud)
-   ```
-4. Decide which is canonical (apex is the natural choice here, since that's what's in
-   `astro.config.mjs`'s `site` value and used for canonical URLs / sitemap). Add a
-   redirect rule so `www` doesn't serve duplicate content:
-   - **Rules** → **Redirect Rules** → **Create rule**.
-   - When incoming requests match: Hostname equals `www.mooonman.com`.
-   - Then: Dynamic redirect → `https://mooonman.com/${request.uri.path}`, status 301.
+1. App → **Settings → Domains** → **HTTP redirect rules** → **Add redirect rule**.
+2. Redirect from: `www.mooonman.com` (no route path).
+3. Redirect to: Domain or path in app → `mooonman.com` (no route path).
+4. **Status code: 301 - Moved Permanently** (not the default 302 — 301 tells search
+   engines the old URL is gone for good and consolidates indexing onto the apex).
 
 ## 5. Verify
 
 - Visit `https://mooonman.com` and `https://www.mooonman.com` — both should load over
-  HTTPS with a valid certificate (Cloudflare issues this automatically, may take a few
-  minutes after the domain is added).
+  HTTPS with a valid certificate, `www` redirecting to the apex.
 - Check `https://mooonman.com/sitemap-index.xml` and `/robots.txt` resolve.
-- Every push to `main` on GitHub triggers a new Pages deploy automatically — no further
-  setup needed.
 
 ## Before you flip the switch: content still needed
 
