@@ -84,8 +84,10 @@ is truly done:
 grep -rn "PLACEHOLDER" src/
 ```
 
-This currently includes: the About section copy, GitHub/LinkedIn footer links, and all
-three seed project entries (which should be replaced with real projects, or removed).
+This currently includes: the two remaining seed project entries (`second-project.md`,
+`idea-notes.md` — replace with real projects, or remove), and the three seed log
+entries in `src/content/log/` (replace with real dated notes). About section copy and
+GitHub/LinkedIn footer links are done.
 
 ## Future (out of scope for v1 — do not build without a fresh scope decision)
 

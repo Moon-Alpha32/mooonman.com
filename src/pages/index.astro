@@ -3,13 +3,21 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Eyebrow from '../components/Eyebrow.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import Button from '../components/Button.astro';
+import LogEntry from '../components/LogEntry.astro';
 import { getCollection } from 'astro:content';
+import { getLogEntries } from '../lib/log';
+import { getRepoStats } from '../lib/github';
 
 const allProjects = await getCollection('projects', ({ data }) => !data.draft);
-const featured = allProjects
-  .filter((project) => project.data.featured)
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, 6);
+const featured = await Promise.all(
+  allProjects
+    .filter((project) => project.data.featured)
+    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+    .slice(0, 6)
+    .map(async (project) => ({ project, stats: await getRepoStats(project.data.repo) }))
+);
+
+const recentLogEntries = await getLogEntries({ limit: 3 });
 ---
 
 <BaseLayout
@@ -33,13 +41,14 @@ const featured = allProjects
     <h2 class="display-lg section-heading">Selected work</h2>
     <div class="project-grid">
       {
-        featured.map((project) => (
+        featured.map(({ project, stats }) => (
           <ProjectCard
             href={`/projects/${project.id}/`}
             title={project.data.title}
             description={project.data.description}
             status={project.data.status}
             tags={project.data.tags}
+            stats={stats}
           />
         ))
       }
@@ -49,14 +58,32 @@ const featured = allProjects
     </div>
   </section>
 
+  <section class="container section" id="log">
+    <Eyebrow text="02 — LOG" />
+    <h2 class="display-lg section-heading">Recent activity</h2>
+    <div class="log-list">
+      {
+        recentLogEntries.map(({ entry, Content }) => (
+          <LogEntry date={entry.data.date}>
+            <Content />
+          </LogEntry>
+        ))
+      }
+    </div>
+    <div class="section-cta">
+      <Button href="/log/" variant="ghost">All entries →</Button>
+    </div>
+  </section>
+
   <section class="container section" id="about">
-    <Eyebrow text="02 — ABOUT" />
+    <Eyebrow text="03 — ABOUT" />
     <h2 class="display-lg section-heading">About</h2>
     <p class="body about-body">
-      <!-- PLACEHOLDER: 2–3 sentences from Alex — who he is, what he's into, why this site
-      exists. Keep it first-person and short; no career-history paragraph. -->
-      PLACEHOLDER: 2–3 sentences from Alex — who he is, what he's into, why this site
-      exists.
+      I'm Alex. This site is where I keep my personal projects — small tools and
+      experiments I build in my spare time, mostly around things I already care about,
+      like Fantasy Premier League and football stats. Some are finished, some are
+      half-built, and that's fine; the point is to keep making things and putting them
+      somewhere. mooonman is the home orbit.
     </p>
   </section>
 </BaseLayout>
@@ -77,7 +104,7 @@ const featured = allProjects
     pointer-events: none;
     background: radial-gradient(
       ellipse 60% 45% at 50% -10%,
-      rgba(166, 200, 255, 0.13),
+      rgba(166, 200, 255, var(--moonglow-opacity, 0.13)),
       transparent 70%
     );
   }

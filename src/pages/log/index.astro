@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Eyebrow from '../../components/Eyebrow.astro';
+import LogEntry from '../../components/LogEntry.astro';
+import { getLogEntries } from '../../lib/log';
+
+const entries = await getLogEntries();
+---
+
+<BaseLayout title="Log — mooonman" description="A running log of what I've been building, in short.">
+  <section class="container section">
+    <Eyebrow text="ALL ENTRIES" />
+    <h1 class="display-lg section-heading">Log</h1>
+    <p class="body section-intro">A running log of what I've been building, in short.</p>
+
+    <div class="log-list">
+      {
+        entries.map(({ entry, Content }) => (
+          <LogEntry date={entry.data.date}>
+            <Content />
+          </LogEntry>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .section {
+    padding-block: var(--space-section);
+  }
+
+  .section-heading {
+    margin-top: 0;
+  }
+
+  .section-intro {
+    color: var(--text-secondary);
+    max-width: 65ch;
+    margin-top: var(--space-sm);
+    margin-bottom: var(--space-xl);
+  }
+</style>

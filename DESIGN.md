@@ -63,13 +63,21 @@ components.
 /* Positioned behind hero content, overflow hidden, pointer-events none */
 background: radial-gradient(
   ellipse 60% 45% at 50% -10%,
-  rgba(166, 200, 255, 0.13),
+  rgba(166, 200, 255, var(--moonglow-opacity, 0.13)),
   transparent 70%
 );
 ```
 
 Rules: hero only. Never animate it, never increase opacity above 0.15, never add a second
 gradient anywhere on the site.
+
+**Narrow amendment (time-of-day intensity):** `--moonglow-opacity` may vary once per
+page load based on the visitor's local time of day (dimmer around midday, fuller at
+night), set synchronously via a pre-paint inline script — never via CSS transition,
+`@keyframes`, or a JS animation loop, and never exceeding 0.15. This is a single static
+value chosen at load, not motion, so it does not relax the "never animate" rule for
+this gradient or anything else on the site. The `0.13` fallback in `var()` is the
+default for no-JS/CSP-blocked contexts and must always match the original static value.
 
 ---
 
@@ -135,6 +143,11 @@ The core unit of the site.
   heading semantics inside).
 - Optional thumbnail: 16:9, radius `8px`, above status row, `--surface-overlay`
   placeholder when absent. Cards must look complete without images.
+- Optional trailing stats line: `label-mono`, `--text-mute`, below the tags row.
+  Populated at build time from the GitHub API when a project sets `repo` in its
+  frontmatter (e.g. `★ 12 · TypeScript · updated July 2026`). Absent entirely when
+  `repo` is unset or the fetch fails — cards must look complete without it, same rule
+  as thumbnails.
 
 ### Tag / Chip
 `label-mono`, `--text-mute`, 1px `--border-hairline`, radius `999px`, padding `4px 10px`.
@@ -240,7 +253,9 @@ Quick reference for any AI agent building or extending this site:
   (labels/meta, 400, uppercase, tracked +0.08em).
 - Spacing on a 4px base; sections separated by 128px; content max 1080px, left-aligned.
 - Elevation = surface ladder + 1px borders. **Never** box-shadows or extra gradients.
-- One radial moonglow gradient behind the hero is the only decoration on the site.
+- One radial moonglow gradient behind the hero is the only decoration on the site. Its
+  opacity may vary once per load by local time of day (0.06–0.15, set pre-paint via
+  `--moonglow-opacity`), but is never animated/transitioned.
 - Ready-to-use prompt: *"Build [component] for mooonman.com per DESIGN.md: Moonlit
   theme — #0B0D12 canvas, #E9ECF2/#9AA3B2 text, #A6C8FF accent used sparingly, Space
   Grotesk headings with negative tracking, JetBrains Mono uppercase eyebrows, surfaces +

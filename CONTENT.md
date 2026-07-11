@@ -22,17 +22,26 @@ the implementing agent keeps these markers in source code comments so they're gr
 - Heading (display-lg): **Selected work**
 - Below grid, ghost button: `All projects →` (links to `/projects/`)
 
+### Log section
+- Eyebrow: `02 — LOG`
+- Heading (display-lg): **Recent activity**
+- Body: latest 3 entries from `src/content/log/`, newest first
+- Below list, ghost button: `All entries →` (links to `/log/`)
+
 ### About section
-- Eyebrow: `02 — ABOUT`
+- Eyebrow: `03 — ABOUT`
 - Heading: **About**
-- Body: `PLACEHOLDER: 2–3 sentences from Alex — who he is, what he's into, why this site
-  exists. Keep it first-person and short; no career-history paragraph.`
+- Body: `I'm Alex. This site is where I keep my personal projects — small tools and
+  experiments I build in my spare time, mostly around things I already care about, like
+  Fantasy Premier League and football stats. Some are finished, some are half-built,
+  and that's fine; the point is to keep making things and putting them somewhere.
+  mooonman is the home orbit.`
 
 ### Contact (footer)
 - Sign-off line: `Want to talk about any of this? Get in touch.`
 - Links: `Email` → mailto:alexmooney@hotmail.co.uk ·
-  `GitHub` → PLACEHOLDER: GitHub profile URL ·
-  `LinkedIn` → PLACEHOLDER: LinkedIn URL (drop if unwanted)
+  `GitHub` → https://github.com/Moon-Alpha32
+  (LinkedIn dropped — not wanted)
 - Small print: `© 2026 mooonman. Built with Astro.`
 
 ## Projects index (`/projects/`)
@@ -40,24 +49,44 @@ the implementing agent keeps these markers in source code comments so they're gr
 - Heading: **Everything so far**
 - Intro (body): `The full list — live, in progress, and retired.`
 
+## Log index (`/log/`)
+- Eyebrow: `ALL ENTRIES`
+- Heading: **Log**
+- Intro (body): `A running log of what I've been building, in short.`
+
 ## 404
 - Heading (display-lg): **Lost in space.**
 - Body: `This page doesn't exist — or hasn't been built yet.`
 - Link: `← Back home`
 
+## Real project entries
+
+- `fpl-h2h-dashboard.md` — title: "FPL H2H Dashboard"; status: live; featured: true;
+  tags: [FPL, Premier League, Fantasy, Dashboard]; repo: Moon-Alpha32/FPL-League;
+  url: fpl-h2h-dashboard-orf8a.ondigitalocean.app. Replaces the old "Project One"
+  placeholder.
+
 ## Seed project entries (all PLACEHOLDER — replace with real projects)
 
-Three seed entries so the design can be evaluated with realistic content:
+Two seed entries remain so the design can still be evaluated with realistic content
+alongside real ones:
 
-1. `first-project.md` — title: "Project One"; status: wip; featured: true;
-   tags: [web, experiment]; description: "PLACEHOLDER: one sentence on what this is."
-2. `second-project.md` — title: "Project Two"; status: live; featured: true;
+1. `second-project.md` — title: "Project Two"; status: live; featured: true;
    tags: [tooling]; description: "PLACEHOLDER: one sentence on what this is."
-3. `idea-notes.md` — title: "Ideas backlog"; status: archived; featured: false;
+2. `idea-notes.md` — title: "Ideas backlog"; status: archived; featured: false;
    draft: true; description: "PLACEHOLDER: parked ideas, not yet public."
 
 Each body: 2–3 short markdown sections (What it is / How it works / Status) with
 placeholder prose, so the project-detail prose styles can be verified.
+
+## Seed log entries (all PLACEHOLDER — replace with real entries)
+
+Three dated seed entries in `src/content/log/`, so the log's rhythm can be evaluated
+with realistic content: `2026-06-20-started-the-site.md`,
+`2026-06-27-second-entry.md`, `2026-07-04-third-entry.md`. Each is one short
+`PLACEHOLDER:` paragraph — no headings, no multi-section structure (unlike project
+bodies). Real entries should stay just as short: one or two sentences on what shipped,
+broke, or changed.
 
 ## Voice & microcopy rules
 - First person, lowercase-calm. Short sentences. No exclamation marks.

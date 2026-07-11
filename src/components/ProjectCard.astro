@@ -9,9 +9,10 @@ interface Props {
   status: 'live' | 'wip' | 'archived';
   tags: string[];
   thumbnail?: string;
+  stats?: string | null;
 }
 
-const { href, title, description, status, tags, thumbnail } = Astro.props;
+const { href, title, description, status, tags, thumbnail, stats } = Astro.props;
 const visibleTags = tags.slice(0, 4);
 ---
 
@@ -41,6 +42,8 @@ const visibleTags = tags.slice(0, 4);
       </div>
     )
   }
+
+  {stats && <p class="label-mono card-stats">{stats}</p>}
 </a>
 
 <style>
@@ -89,6 +92,11 @@ const visibleTags = tags.slice(0, 4);
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-xs);
+  }
+
+  .card-stats {
+    color: var(--text-mute);
+    margin-top: var(--space-xs);
   }
 
   @media (prefers-reduced-motion: reduce) {

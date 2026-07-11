@@ -16,6 +16,15 @@ const ogImageURL = new URL('/og.png', Astro.site);
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <script is:inline>
+      try {
+        var hour = new Date().getHours();
+        var distFromMidnight = Math.min(hour, 24 - hour);
+        var t = Math.min(1, Math.max(0, distFromMidnight / 12));
+        var opacity = Math.min(0.15, Math.max(0.06, 0.15 - t * 0.09));
+        document.documentElement.style.setProperty('--moonglow-opacity', String(opacity));
+      } catch (e) {}
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />

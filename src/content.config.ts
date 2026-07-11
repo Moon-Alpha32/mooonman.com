@@ -10,10 +10,19 @@ const projects = defineCollection({
     date: z.coerce.date(),
     tags: z.array(z.string()).max(4),
     url: z.string().optional(),
+    // GitHub repo slug, "owner/name" — powers the live stats line on project cards.
     repo: z.string().optional(),
     featured: z.boolean().default(false),
     draft: z.boolean().default(false),
   }),
 });
 
-export const collections = { projects };
+const log = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/log' }),
+  schema: z.object({
+    date: z.coerce.date(),
+    draft: z.boolean().default(false),
+  }),
+});
+
+export const collections = { projects, log };
