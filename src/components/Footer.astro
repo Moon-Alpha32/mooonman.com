@@ -13,14 +13,14 @@ const year = new Date().getFullYear();
       <a href="https://github.com/Moon-Alpha32" class="body-sm footer-link">GitHub</a>
     </nav>
 
-    <p class="body-sm footer-print">© {year} mooonman. Built with Astro.</p>
+    <p class="label-mono footer-print">© {year} mooonman. Built with Astro.</p>
   </div>
 </footer>
 
 <style>
   .site-footer {
     background: var(--surface-raised);
-    border-top: 1px solid var(--border-hairline);
+    border-top: 3px solid var(--navy);
     padding-block: var(--space-lg);
   }
 
@@ -33,17 +33,17 @@ const year = new Date().getFullYear();
 
   .wordmark {
     font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 1.125rem;
-    color: var(--text-moonlight);
+    text-transform: uppercase;
+    font-size: 1.2rem;
+    color: var(--ink);
   }
 
   .wordmark-moon {
-    color: var(--moonglow);
+    color: var(--spot-red);
   }
 
   .footer-signoff {
-    color: var(--text-secondary);
+    color: var(--ink-mute);
   }
 
   .footer-links {
@@ -53,15 +53,17 @@ const year = new Date().getFullYear();
   }
 
   .footer-link {
-    color: var(--text-secondary);
+    color: var(--navy);
+    text-decoration: underline;
     transition: color var(--transition-fast);
   }
 
   .footer-link:hover {
-    color: var(--text-moonlight);
+    color: var(--spot-red);
   }
 
   .footer-print {
-    color: var(--text-mute);
+    color: var(--ink-mute);
+    font-weight: 400;
   }
 </style>

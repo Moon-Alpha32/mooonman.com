@@ -21,7 +21,7 @@ const allProjects = await Promise.all(
 
     <div class="project-grid">
       {
-        allProjects.map(({ project, stats }) => (
+        allProjects.map(({ project, stats }, i) => (
           <ProjectCard
             href={`/projects/${project.id}/`}
             title={project.data.title}
@@ -29,6 +29,7 @@ const allProjects = await Promise.all(
             status={project.data.status}
             tags={project.data.tags}
             stats={stats}
+            number={i + 1}
           />
         ))
       }
@@ -46,7 +47,7 @@ const allProjects = await Promise.all(
   }
 
   .section-intro {
-    color: var(--text-secondary);
+    color: var(--ink-mute);
     max-width: 65ch;
     margin-top: var(--space-sm);
     margin-bottom: var(--space-xl);

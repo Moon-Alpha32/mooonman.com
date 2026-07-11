@@ -1,8 +1,9 @@
-@import '@fontsource/space-grotesk/500.css';
-@import '@fontsource/space-grotesk/700.css';
-@import '@fontsource/inter/400.css';
-@import '@fontsource/inter/500.css';
-@import '@fontsource/jetbrains-mono/400.css';
+@import '@fontsource/bebas-neue/400.css';
+@import '@fontsource/source-serif-4/400.css';
+@import '@fontsource/source-serif-4/400-italic.css';
+@import '@fontsource/source-serif-4/600.css';
+@import '@fontsource/courier-prime/400.css';
+@import '@fontsource/courier-prime/700.css';
 
 @import './tokens.css';
 
@@ -27,13 +28,15 @@ dd {
 }
 
 html {
-  color-scheme: dark;
+  color-scheme: light;
   -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background: var(--surface-space);
-  color: var(--text-secondary);
+  background: var(--paper);
+  background-image: radial-gradient(rgba(27, 29, 34, 0.05) 1px, transparent 1px);
+  background-size: 6px 6px;
+  color: var(--ink-mute);
   font-family: var(--font-body);
   font-size: 1rem;
   line-height: 1.65;
@@ -48,7 +51,7 @@ svg {
 }
 
 a {
-  color: var(--moonglow);
+  color: var(--navy);
   text-decoration: none;
 }
 
@@ -71,29 +74,32 @@ button {
 
 .display-xl {
   font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(2.75rem, 6vw, 4.5rem);
-  letter-spacing: -0.03em;
-  line-height: 1.05;
-  color: var(--text-moonlight);
+  font-weight: 400;
+  text-transform: uppercase;
+  font-size: clamp(3rem, 7vw, 5.5rem);
+  letter-spacing: 0.005em;
+  line-height: 1;
+  color: var(--ink);
 }
 
 .display-lg {
   font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(2rem, 4vw, 3rem);
-  letter-spacing: -0.02em;
-  line-height: 1.1;
-  color: var(--text-moonlight);
+  font-weight: 400;
+  text-transform: uppercase;
+  font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+  letter-spacing: 0.005em;
+  line-height: 1.02;
+  color: var(--ink);
 }
 
 .display-md {
   font-family: var(--font-display);
-  font-weight: 500;
-  font-size: 1.5rem;
-  letter-spacing: -0.01em;
-  line-height: 1.2;
-  color: var(--text-moonlight);
+  font-weight: 400;
+  text-transform: uppercase;
+  font-size: 1.6rem;
+  letter-spacing: 0.005em;
+  line-height: 1.05;
+  color: var(--ink);
 }
 
 .body-lg {
@@ -119,7 +125,7 @@ button {
 
 .label-mono {
   font-family: var(--font-mono);
-  font-weight: 400;
+  font-weight: 700;
   font-size: 0.75rem;
   letter-spacing: 0.08em;
   line-height: 1;
@@ -147,10 +153,10 @@ button {
   left: var(--space-sm);
   z-index: 100;
   padding: var(--space-xs) var(--space-sm);
-  background: var(--surface-raised);
-  color: var(--text-moonlight);
-  border: 1px solid var(--border-hairline);
-  border-radius: 8px;
+  background: var(--surface-card);
+  color: var(--ink);
+  border: 1px solid var(--border-rule);
+  border-radius: var(--radius);
 }
 
 .skip-link:focus {
@@ -160,7 +166,7 @@ button {
 /* Focus ring */
 
 :focus-visible {
-  outline: 2px solid var(--moonglow);
+  outline: 2px solid var(--navy);
   outline-offset: 2px;
 }
 

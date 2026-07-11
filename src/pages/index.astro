@@ -18,11 +18,36 @@ const featured = await Promise.all(
 );
 
 const recentLogEntries = await getLogEntries({ limit: 3 });
+const logCount = (await getCollection('log', ({ data }) => !data.draft)).length;
+
+const liveCount = allProjects.filter((p) => p.data.status === 'live').length;
+const wipCount = allProjects.filter((p) => p.data.status === 'wip').length;
+const archivedCount = allProjects.filter((p) => p.data.status === 'archived').length;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      name: 'mooonman',
+      url: Astro.site?.toString(),
+      description:
+        'mooonman.com is where I put personal projects, experiments, and ideas — some finished, some in progress, all mine.',
+    },
+    {
+      '@type': 'Person',
+      name: 'Alex',
+      url: Astro.site?.toString(),
+      sameAs: ['https://github.com/Moon-Alpha32'],
+    },
+  ],
+};
 ---
 
 <BaseLayout
   title="mooonman"
   description="mooonman.com is where I put personal projects, experiments, and ideas — some finished, some in progress, all mine."
+  jsonLd={jsonLd}
 >
   <section class="hero">
     <div class="container hero-inner">
@@ -33,6 +58,13 @@ const recentLogEntries = await getLogEntries({ limit: 3 });
         finished, some in progress, all mine.
       </p>
       <Button href="#projects" variant="ghost">View projects ↓</Button>
+
+      <div class="teamsheet label-mono">
+        <span>{liveCount} live</span>
+        <span>{wipCount} in progress</span>
+        <span>{archivedCount} archived</span>
+        <span>{logCount} log {logCount === 1 ? 'entry' : 'entries'}</span>
+      </div>
     </div>
   </section>
 
@@ -41,7 +73,7 @@ const recentLogEntries = await getLogEntries({ limit: 3 });
     <h2 class="display-lg section-heading">Selected work</h2>
     <div class="project-grid">
       {
-        featured.map(({ project, stats }) => (
+        featured.map(({ project, stats }, i) => (
           <ProjectCard
             href={`/projects/${project.id}/`}
             title={project.data.title}
@@ -49,6 +81,7 @@ const recentLogEntries = await getLogEntries({ limit: 3 });
             status={project.data.status}
             tags={project.data.tags}
             stats={stats}
+            number={i + 1}
           />
         ))
       }
@@ -90,27 +123,13 @@ const recentLogEntries = await getLogEntries({ limit: 3 });
 
 <style>
   .hero {
-    position: relative;
-    min-height: 80vh;
+    min-height: 70vh;
     display: flex;
     align-items: center;
-    overflow: hidden;
-  }
-
-  .hero::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: radial-gradient(
-      ellipse 60% 45% at 50% -10%,
-      rgba(166, 200, 255, var(--moonglow-opacity, 0.13)),
-      transparent 70%
-    );
+    border-bottom: 3px solid var(--navy);
   }
 
   .hero-inner {
-    position: relative;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -118,12 +137,23 @@ const recentLogEntries = await getLogEntries({ limit: 3 });
   }
 
   .hero-eyebrow {
-    color: var(--moonglow);
+    color: var(--spot-red);
   }
 
   .hero-subline {
-    color: var(--text-secondary);
+    color: var(--ink-mute);
     max-width: 65ch;
+  }
+
+  .teamsheet {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm) var(--space-md);
+    color: var(--ink-mute);
+    margin-top: var(--space-sm);
+    padding-top: var(--space-sm);
+    border-top: 1px dashed var(--border-rule);
+    width: 100%;
   }
 
   .section {

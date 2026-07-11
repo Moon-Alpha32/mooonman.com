@@ -19,7 +19,10 @@ function isActive(href: string) {
 
 <header class="nav" id="site-nav">
   <div class="nav-inner container">
-    <a href="/" class="wordmark">moo<span class="wordmark-moon">o</span>nman</a>
+    <a href="/" class="masthead">
+      <span class="wordmark">moo<span class="wordmark-moon">o</span>nman</span>
+      <span class="masthead-tag label-mono">Official Matchday Programme</span>
+    </a>
 
     <button
       class="nav-toggle"
@@ -63,16 +66,8 @@ function isActive(href: string) {
     top: 0;
     z-index: 50;
     height: var(--nav-height);
-    border-bottom: 1px solid transparent;
-    transition: background-color var(--transition-max), backdrop-filter var(--transition-max),
-      border-color var(--transition-max);
-  }
-
-  .nav.is-scrolled {
-    background-color: color-mix(in srgb, var(--surface-raised) 80%, transparent);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom-color: var(--border-hairline);
+    background: var(--surface-raised);
+    border-bottom: 3px solid var(--navy);
   }
 
   .nav-inner {
@@ -82,15 +77,28 @@ function isActive(href: string) {
     justify-content: space-between;
   }
 
+  .masthead {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-sm);
+  }
+
   .wordmark {
     font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 1.125rem;
-    color: var(--text-moonlight);
+    text-transform: uppercase;
+    font-size: 1.4rem;
+    letter-spacing: 0.01em;
+    color: var(--ink);
   }
 
   .wordmark-moon {
-    color: var(--moonglow);
+    color: var(--spot-red);
+  }
+
+  .masthead-tag {
+    display: none;
+    font-style: italic;
+    color: var(--ink-mute);
   }
 
   .nav-links {
@@ -100,19 +108,21 @@ function isActive(href: string) {
   }
 
   .nav-link {
-    font-family: var(--font-body);
-    font-weight: 400;
-    font-size: 0.875rem;
-    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
     transition: color var(--transition-fast);
   }
 
   .nav-link:hover {
-    color: var(--text-moonlight);
+    color: var(--ink);
   }
 
   .nav-link[aria-current='page'] {
-    color: var(--moonglow);
+    color: var(--spot-red);
   }
 
   .nav-toggle {
@@ -129,7 +139,7 @@ function isActive(href: string) {
     display: block;
     width: 22px;
     height: 2px;
-    background: var(--text-moonlight);
+    background: var(--ink);
     transition: transform var(--transition-max), opacity var(--transition-max);
   }
 
@@ -149,7 +159,7 @@ function isActive(href: string) {
     position: fixed;
     inset: 0;
     z-index: 40;
-    background: var(--surface-space);
+    background: var(--surface-card);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -168,15 +178,21 @@ function isActive(href: string) {
 
   .nav-overlay-link {
     font-family: var(--font-display);
-    font-weight: 500;
-    font-size: 1.5rem;
-    letter-spacing: -0.01em;
-    color: var(--text-moonlight);
+    text-transform: uppercase;
+    font-size: 1.8rem;
+    letter-spacing: 0.005em;
+    color: var(--ink);
     padding: var(--space-xs) 0;
   }
 
   .nav-overlay-link[aria-current='page'] {
-    color: var(--moonglow);
+    color: var(--spot-red);
+  }
+
+  @media (min-width: 561px) {
+    .masthead-tag {
+      display: inline;
+    }
   }
 
   @media (min-width: 769px) {
@@ -191,16 +207,8 @@ function isActive(href: string) {
 </style>
 
 <script>
-  const nav = document.getElementById('site-nav');
   const toggle = document.getElementById('nav-toggle') as HTMLButtonElement | null;
   const overlay = document.getElementById('nav-overlay');
-
-  const onScroll = () => {
-    if (!nav) return;
-    nav.classList.toggle('is-scrolled', window.scrollY > 8);
-  };
-  onScroll();
-  window.addEventListener('scroll', onScroll, { passive: true });
 
   if (toggle && overlay) {
     let lastFocused: HTMLElement | null = null;

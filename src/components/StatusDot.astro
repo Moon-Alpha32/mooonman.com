@@ -11,39 +11,22 @@ const labels: Record<Props['status'], string> = {
 };
 ---
 
-<span class="status">
-  <span class={`status-dot status-dot--${status}`} aria-hidden="true"></span>
-  <span class="label-mono status-label">{labels[status]}</span>
-</span>
+<span class={`label-mono status status--${status}`}>{labels[status]}</span>
 
 <style>
   .status {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-xs);
-  }
-
-  .status-dot {
     display: inline-block;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    flex-shrink: 0;
   }
 
-  .status-dot--live {
-    background: var(--success);
+  .status--live {
+    color: var(--spot-red);
   }
 
-  .status-dot--wip {
-    background: var(--warning);
+  .status--wip {
+    color: var(--navy);
   }
 
-  .status-dot--archived {
-    background: var(--text-mute);
-  }
-
-  .status-label {
-    color: var(--text-mute);
+  .status--archived {
+    color: var(--ink-mute);
   }
 </style>

@@ -21,9 +21,28 @@ const formattedDate = new Intl.DateTimeFormat('en-GB', {
   year: 'numeric',
   month: 'long',
 }).format(project.data.date);
+
+const canonicalURL = new URL(`/projects/${project.id}/`, Astro.site);
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWork',
+  name: project.data.title,
+  description: project.data.description,
+  url: canonicalURL.toString(),
+  dateCreated: project.data.date.toISOString(),
+  author: { '@type': 'Person', name: 'Alex', url: Astro.site?.toString() },
+  keywords: project.data.tags.join(', '),
+  ...(project.data.url ? { sameAs: project.data.url } : {}),
+};
 ---
 
-<BaseLayout title={`${project.data.title} — mooonman`} description={project.data.description}>
+<BaseLayout
+  title={`${project.data.title} — mooonman`}
+  description={project.data.description}
+  ogType="article"
+  publishedTime={project.data.date}
+  jsonLd={jsonLd}
+>
   <article class="container section">
     <a href="/projects/" class="body-sm back-link">← All projects</a>
 
@@ -52,12 +71,12 @@ const formattedDate = new Intl.DateTimeFormat('en-GB', {
 
   .back-link {
     display: inline-block;
-    color: var(--text-secondary);
+    color: var(--navy);
     margin-bottom: var(--space-xl);
   }
 
   .back-link:hover {
-    color: var(--text-moonlight);
+    color: var(--spot-red);
   }
 
   .title-block {
@@ -72,7 +91,7 @@ const formattedDate = new Intl.DateTimeFormat('en-GB', {
   }
 
   .meta-date {
-    color: var(--text-mute);
+    color: var(--ink-mute);
   }
 
   .project-title {
@@ -87,27 +106,29 @@ const formattedDate = new Intl.DateTimeFormat('en-GB', {
 
   .prose {
     max-width: 65ch;
-    color: var(--text-secondary);
+    color: var(--ink-mute);
   }
 
   .prose :global(h2) {
     font-family: var(--font-display);
-    font-weight: 700;
+    font-weight: 400;
+    text-transform: uppercase;
     font-size: clamp(2rem, 4vw, 3rem);
-    letter-spacing: -0.02em;
-    line-height: 1.1;
-    color: var(--text-moonlight);
+    letter-spacing: 0.005em;
+    line-height: 1.05;
+    color: var(--ink);
     margin-top: var(--space-xl);
     margin-bottom: var(--space-sm);
   }
 
   .prose :global(h3) {
     font-family: var(--font-display);
-    font-weight: 500;
+    font-weight: 400;
+    text-transform: uppercase;
     font-size: 1.5rem;
-    letter-spacing: -0.01em;
-    line-height: 1.2;
-    color: var(--text-moonlight);
+    letter-spacing: 0.005em;
+    line-height: 1.1;
+    color: var(--ink);
     margin-top: var(--space-lg);
     margin-bottom: var(--space-sm);
   }
@@ -117,27 +138,30 @@ const formattedDate = new Intl.DateTimeFormat('en-GB', {
   }
 
   .prose :global(a) {
-    color: var(--moonglow);
+    color: var(--navy);
     text-decoration: underline;
   }
 
   .prose :global(code) {
     font-family: var(--font-mono);
     font-size: 0.875rem;
-    background: var(--surface-overlay);
-    border-radius: 4px;
+    background: var(--surface-raised);
+    border: 1px solid var(--border-rule);
+    border-radius: var(--radius);
     padding: 2px 6px;
   }
 
   .prose :global(pre) {
-    background: var(--surface-overlay);
-    border-radius: 8px;
+    background: var(--surface-raised);
+    border: 1px solid var(--border-rule);
+    border-radius: var(--radius);
     padding: var(--space-md);
     overflow-x: auto;
   }
 
   .prose :global(pre code) {
     background: none;
+    border: none;
     padding: 0;
   }
 </style>

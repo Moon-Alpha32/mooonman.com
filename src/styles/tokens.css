@@ -1,26 +1,23 @@
 :root {
   /* Surfaces */
-  --surface-space: #0b0d12;
-  --surface-raised: #12151c;
-  --surface-overlay: #1a1f29;
-  --border-hairline: #242a36;
+  --paper: #ede9df; /* darkened from #EDEAE1 to clear WCAG AA against --ink-mute */
+  --surface-card: #ffffff;
+  --surface-raised: #f5f2ea;
+  --border-rule: #c9c4b6;
 
   /* Text */
-  --text-moonlight: #e9ecf2;
-  --text-secondary: #9aa3b2;
-  --text-mute: #768191; /* lightened from DESIGN.md's #5E6673 to clear WCAG AA 4.5:1 at label-mono sizes */
+  --ink: #1b1d22;
+  --ink-mute: #5c5a52; /* hand-tuned for WCAG AA 4.5:1 against --paper and --surface-card at small label sizes */
 
   /* Accent & semantic */
-  --moonglow: #a6c8ff;
-  --moonglow-dim: #6e90c4;
-  --success: #4ade80;
-  --warning: #fbbf24;
-  --error: #f87171;
+  --navy: #1f3a5f;
+  --spot-red: #b31f24; /* darkened from #C8262C to clear WCAG AA 4.5:1 against --paper with headroom */
+  /* Archived status uses --ink-mute directly — no fourth hue */
 
   /* Fonts */
-  --font-display: 'Space Grotesk', sans-serif;
-  --font-body: 'Inter', sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-body: 'Source Serif 4', serif;
+  --font-mono: 'Courier Prime', monospace;
 
   /* Spacing (4px base) */
   --space-xs: 8px;
@@ -37,6 +34,7 @@
   --gutter-mobile: 20px;
   --nav-height: 64px;
   --prose-max-width: 65ch;
+  --radius: 2px; /* sharp/print-shop cornering — deliberately not rounded-lg */
 
   /* Motion */
   --transition-fast: 150ms ease;

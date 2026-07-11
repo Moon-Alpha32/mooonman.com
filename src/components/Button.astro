@@ -15,17 +15,20 @@ const { href, variant = 'ghost' } = Astro.props;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-family: var(--font-body);
-    font-weight: 500;
-    font-size: 1rem;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
     padding: 12px 24px;
-    border-radius: 8px;
-    transition: filter var(--transition-fast), border-color var(--transition-fast);
+    border-radius: var(--radius);
+    transition: filter var(--transition-fast), border-color var(--transition-fast),
+      color var(--transition-fast);
   }
 
   .button-primary {
-    background: var(--moonglow);
-    color: var(--surface-space);
+    background: var(--spot-red);
+    color: var(--surface-card);
   }
 
   .button-primary:hover {
@@ -34,11 +37,12 @@ const { href, variant = 'ghost' } = Astro.props;
 
   .button-ghost {
     background: transparent;
-    border: 1px solid var(--border-hairline);
-    color: var(--text-moonlight);
+    border: 1px solid var(--navy);
+    color: var(--navy);
   }
 
   .button-ghost:hover {
-    border-color: var(--moonglow-dim);
+    background: var(--navy);
+    color: var(--surface-card);
   }
 </style>

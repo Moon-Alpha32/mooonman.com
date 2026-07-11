@@ -10,81 +10,99 @@ interface Props {
   tags: string[];
   thumbnail?: string;
   stats?: string | null;
+  number: number;
 }
 
-const { href, title, description, status, tags, thumbnail, stats } = Astro.props;
+const { href, title, description, status, tags, thumbnail, stats, number } = Astro.props;
 const visibleTags = tags.slice(0, 4);
+const shirtNumber = String(number).padStart(2, '0');
 ---
 
 <a href={href} class="card">
-  {
-    thumbnail ? (
-      <img class="card-thumb" src={thumbnail} alt="" loading="lazy" width="640" height="360" />
-    ) : (
-      <div class="card-thumb card-thumb--placeholder" aria-hidden="true" />
-    )
-  }
+  {thumbnail && <img class="card-thumb" src={thumbnail} alt="" loading="lazy" width="640" height="360" />}
 
-  <div class="card-status">
-    <StatusDot status={status} />
+  <div class="card-header">
+    <span class="display-md card-number" aria-hidden="true">{shirtNumber}</span>
+    <div class="card-header-text">
+      <h3 class="card-title">{title}</h3>
+      <StatusDot status={status} />
+    </div>
   </div>
 
-  <h3 class="display-md card-title">{title}</h3>
+  <div class="card-body">
+    <p class="body-sm card-description">{description}</p>
 
-  <p class="body-sm card-description">{description}</p>
+    {
+      visibleTags.length > 0 && (
+        <div class="card-tags">
+          {visibleTags.map((tag) => (
+            <Tag label={tag} />
+          ))}
+        </div>
+      )
+    }
 
-  {
-    visibleTags.length > 0 && (
-      <div class="card-tags">
-        {visibleTags.map((tag) => (
-          <Tag label={tag} />
-        ))}
-      </div>
-    )
-  }
-
-  {stats && <p class="label-mono card-stats">{stats}</p>}
+    {stats && <p class="label-mono card-stats">{stats}</p>}
+  </div>
 </a>
 
 <style>
   .card {
     display: block;
-    background: var(--surface-raised);
-    border: 1px solid var(--border-hairline);
-    border-radius: 12px;
-    padding: var(--space-md);
-    transition: background-color var(--transition-fast), border-color var(--transition-fast),
-      transform var(--transition-fast);
+    background: var(--surface-card);
+    border: 1px solid var(--border-rule);
+    border-radius: var(--radius);
+    transform: rotate(-0.3deg);
+    transition: border-color var(--transition-fast), transform var(--transition-fast);
   }
 
   .card:hover {
-    background: var(--surface-overlay);
-    border-color: var(--moonglow-dim);
-    transform: translateY(-2px);
+    border-color: var(--navy);
+    transform: rotate(0deg) translateY(-2px);
   }
 
   .card-thumb {
     width: 100%;
     aspect-ratio: 16 / 9;
-    border-radius: 8px;
     object-fit: cover;
-    margin-bottom: var(--space-md);
   }
 
-  .card-thumb--placeholder {
-    background: var(--surface-overlay);
+  .card-header {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    border-bottom: 3px solid var(--navy);
   }
 
-  .card-status {
-    margin-bottom: var(--space-sm);
+  .card-number {
+    font-size: 1.9rem;
+    color: var(--navy);
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .card-header-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
   }
 
   .card-title {
-    margin-bottom: var(--space-xs);
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 1.2rem;
+    line-height: 1.25;
+    color: var(--ink);
+  }
+
+  .card-body {
+    padding: var(--space-sm) var(--space-md) var(--space-md);
   }
 
   .card-description {
-    color: var(--text-secondary);
+    color: var(--ink-mute);
     margin-bottom: var(--space-sm);
   }
 
@@ -92,14 +110,19 @@ const visibleTags = tags.slice(0, 4);
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-xs);
+    margin-bottom: var(--space-sm);
   }
 
   .card-stats {
-    color: var(--text-mute);
-    margin-top: var(--space-xs);
+    color: var(--ink-mute);
+    border-top: 1px dashed var(--border-rule);
+    padding-top: var(--space-xs);
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .card {
+      transform: none;
+    }
     .card:hover {
       transform: none;
     }
